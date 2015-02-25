@@ -11,13 +11,13 @@ endif()
 set(LIB_TYPE "SHARED" CACHE STRING "STATIC, SHARED or MODULE?")
 message("[VHACD] \t LIB_TYPE " ${LIB_TYPE})
 
-#if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
-#set(TARGETNAME VHACD_d)
-#else (CMAKE_BUILD_TYPE EQUAL "DEBUG")
-#set(TARGETNAME VHACD)
-#endif (CMAKE_BUILD_TYPE EQUAL "DEBUG")
-
 add_library(VHACD ${PROJECT_CPP_FILES} ${PROJECT_C_FILES} ${PROJECT_INC_FILES} ${PROJECT_INL_FILES} ${PROJECT_CL_FILES})
+
+if(NOT WIN32)
+find_package( Threads)
+target_link_libraries(VHACD ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
 if (OpenCL_FOUND)
     include_directories("${OpenCL_INCLUDE_DIRS}")
     add_definitions( -DOPENCL_FOUND=1 )
